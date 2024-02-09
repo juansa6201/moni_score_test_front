@@ -1,6 +1,7 @@
 // PersonList.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface Person {
     id: number;
@@ -13,6 +14,7 @@ interface Person {
 }
 
 const PersonList: React.FC = () => {
+    const navigate = useNavigate();
     const [persons, setPersons] = useState<Person[]>([]);
 
     useEffect(() => {
@@ -42,6 +44,11 @@ const PersonList: React.FC = () => {
         }
     };
 
+    const handleEdit = (person: Person) => {
+        navigate(`/edit/${person.id}`, { state: person });
+
+    };
+
     return (
         <div className="container mt-4">
             <h2 className="card-title text-center">Lista de Scores</h2>
@@ -58,7 +65,7 @@ const PersonList: React.FC = () => {
                         </div>
                         <div>
                             <button className="btn btn-danger me-2" onClick={() => handleDelete(person.id)}>Eliminar</button>
-                            <button className="btn btn-primary">Editar</button>
+                            <button className="btn btn-primary" onClick={() => handleEdit(person)}>Editar</button>
                         </div>
                     </li>
                 ))}

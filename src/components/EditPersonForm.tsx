@@ -1,23 +1,32 @@
-// PersonForm.tsx
+// EditPersonForm.tsx
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const PersonForm: React.FC = () => {
-    const [formData, setFormData] = useState({
-        nombre: '',
-        apellido: '',
-        dni: '',
-        email: '',
-        genero: ''
+interface Person {
+    id: number;
+    nombre: string;
+    apellido: string;
+    dni: string;
+    email: string;
+    genero: string;
+}
+
+const EditPersonForm: React.FC = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const person: Person = location.state;
+
+    const [formData, setFormData] = useState<Person>({
+        id: person.id,
+        nombre: person.nombre,
+        apellido: person.apellido,
+        dni: person.dni,
+        email: person.email,
+        genero: person.genero
     });
 
-    const [status, setStatus] = useState('');
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
+    console.log(formData)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -28,11 +37,16 @@ const PersonForm: React.FC = () => {
             // Actualizar el estado formData con el valor del genero mapeado
             const updatedFormData = { ...formData, genero: generoValue };
 
-            const response = await axios.post('http://localhost:8000/api/score/', updatedFormData);
-            setStatus(response.data.status);
+            const response = await axios.put(`http://localhost:8000/api/score/${person.id}/`, updatedFormData);
+            navigate('/list');
         } catch (error) {
             console.error('Error al enviar los datos:', error);
         }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     return (
@@ -43,23 +57,23 @@ const PersonForm: React.FC = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="nombre" className="form-label">Nombre</label>
-                            <input type="text" className="form-control" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required />
+                            <input type="text" className="form-control" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="apellido" className="form-label">Apellido</label>
-                            <input type="text" className="form-control" id="apellido" name="apellido" value={formData.apellido} onChange={handleChange} required />
+                            <input type="text" className="form-control" id="apellido" name="apellido" value={formData.apellido} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="dni" className="form-label">DNI</label>
-                            <input type="text" className="form-control" id="dni" name="dni" value={formData.dni} onChange={handleChange} required />
+                            <label htmlFor="dni" className="form-label">Dni</label>
+                            <input type="text" className="form-control" id="dni" name="dni" value={formData.dni} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Email</label>
-                            <input type="text" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange} required />
+                            <input type="text" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="genero" className="form-label">Género</label>
-                            <select className="form-select" id="genero" name="genero" value={formData.genero} onChange={handleChange} required>
+                            <select className="form-select" id="genero" name="genero" value={formData.genero} onChange={handleChange}>
                                 <option value="">Seleccionar Género</option>
                                 <option value="Masculino">Masculino</option>
                                 <option value="Femenino">Femenino</option>
@@ -67,15 +81,10 @@ const PersonForm: React.FC = () => {
                         </div>
                         <button type="submit" className="btn btn-primary">Enviar</button>
                     </form>
-                    {status && (
-                        <div className={`alert ${status === 'Aprobado' ? 'alert-success' : 'alert-danger'} mt-3`}>
-                            {`El cliente está ${status}`}
-                        </div>
-                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-export default PersonForm;
+export default EditPersonForm;
