@@ -1,23 +1,32 @@
-// PersonForm.tsx
+// EditPersonForm.tsx
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const PersonForm: React.FC = () => {
-    const [formData, setFormData] = useState({
-        nombre: '',
-        apellido: '',
-        dni: '',
-        email: '',
-        genero: ''
+interface Person {
+    id: number;
+    nombre: string;
+    apellido: string;
+    dni: string;
+    email: string;
+    genero: string;
+}
+
+const EditPersonForm: React.FC = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const person: Person = location.state;
+
+    const [formData, setFormData] = useState<Person>({
+        id: person.id,
+        nombre: person.nombre,
+        apellido: person.apellido,
+        dni: person.dni,
+        email: person.email,
+        genero: person.genero
     });
 
-    const [status, setStatus] = useState('');
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
+    console.log(formData)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -28,11 +37,16 @@ const PersonForm: React.FC = () => {
             // Actualizar el estado formData con el valor del genero mapeado
             const updatedFormData = { ...formData, genero: generoValue };
 
-            const response = await axios.post('http://localhost:8000/api/score/', updatedFormData);
-            setStatus(response.data.status);
+            const response = await axios.put(`http://localhost:8000/api/score/${person.id}/`, updatedFormData);
+            navigate('/list');
         } catch (error) {
             console.error('Error al enviar los datos:', error);
         }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     return (
@@ -67,11 +81,10 @@ const PersonForm: React.FC = () => {
                         </div>
                         <button type="submit" className="btn btn-primary">Enviar</button>
                     </form>
-                    {status && <div className={`alert ${status === 'habilitada' ? 'alert-success' : 'alert-danger'} mt-3`}>{`La persona está ${status}`}</div>}
                 </div>
             </div>
         </div>
     );
 };
 
-export default PersonForm;
+export default EditPersonForm;
