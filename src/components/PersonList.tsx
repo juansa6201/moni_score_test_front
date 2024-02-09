@@ -44,7 +44,7 @@ const PersonList: React.FC = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Lista de Personas</h2>
+            <h2 className="card-title text-center">Lista de Scores</h2>
             <ul className="list-group mt-3">
                 {persons.map(person => (
                     <li key={person.id} className="list-group-item d-flex justify-content-between align-items-center">
