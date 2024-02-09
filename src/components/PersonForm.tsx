@@ -21,7 +21,14 @@ const PersonForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/score/', formData);
+            // Mapear el valor del genero
+            const generoValue = formData.genero === 'Masculino' ? 'M' :
+                                formData.genero === 'Femenino' ? 'F' : 'D';
+
+            // Actualizar el estado formData con el valor del genero mapeado
+            const updatedFormData = { ...formData, genero: generoValue };
+
+            const response = await axios.post('http://localhost:8000/api/score/', updatedFormData);
             setStatus(response.data.status);
         } catch (error) {
             console.error('Error al enviar los datos:', error);
@@ -51,8 +58,12 @@ const PersonForm: React.FC = () => {
                             <input type="text" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="nombre" className="form-label">Genero</label>
-                            <input type="text" className="form-control" id="genero" name="genero" value={formData.genero} onChange={handleChange} />
+                            <label htmlFor="genero" className="form-label">Género</label>
+                            <select className="form-select" id="genero" name="genero" value={formData.genero} onChange={handleChange}>
+                                <option value="">Seleccionar Género</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
                         </div>
                         <button type="submit" className="btn btn-primary">Enviar</button>
                     </form>

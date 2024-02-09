@@ -6,11 +6,11 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
-        <Link to="/" className="navbar-brand">Cargar Datos</Link>
+        <Link to="/" className="navbar-brand">Scorear Cliente</Link>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to="/list" className="nav-link">Listar Datos</Link>
+              <Link to="/list" className="nav-link">Listar Scores</Link>
             </li>
           </ul>
         </div>
