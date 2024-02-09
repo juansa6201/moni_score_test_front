@@ -60,15 +60,15 @@ const EditPersonForm: React.FC = () => {
                             <input type="text" className="form-control" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="nombre" className="form-label">Apellido</label>
+                            <label htmlFor="apellido" className="form-label">Apellido</label>
                             <input type="text" className="form-control" id="apellido" name="apellido" value={formData.apellido} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="nombre" className="form-label">Dni</label>
+                            <label htmlFor="dni" className="form-label">Dni</label>
                             <input type="text" className="form-control" id="dni" name="dni" value={formData.dni} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="nombre" className="form-label">Email</label>
+                            <label htmlFor="email" className="form-label">Email</label>
                             <input type="text" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
